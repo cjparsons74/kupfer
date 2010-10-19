@@ -3,7 +3,7 @@ __kupfer_name__ = _("Opera Mail")
 __kupfer_sources__ = ("OperaContactsSource", )
 __kupfer_actions__ = ("NewMailAction", )
 __description__ = _("Opera Mail contacts and actions")
-__version__ = "2010-05-18"
+__version__ = "2010-10-19"
 __author__ = "Chris Parsons <cjparsons1@yahoo.co.uk>"
 
 import codecs
@@ -97,7 +97,12 @@ class OperaContactsSource(ToplevelGroupingSource, FilesystemWatchMixin):
 							folderList.append(name)
 					elif line.startswith(u'MAIL=') and name and \
 							entryType == 'Contact' and not TRASH in folderList:
-						yield EmailContact(line[5:], name)
+						emails = line[5:].split('') # multiple addresses separated with two Ctrl-B characaters
+						if len(emails) == 1:
+							yield EmailContact(emails[0], name)
+						else:
+							for i,e in enumerate(emails):
+								yield EmailContact(e, name + " (email %d)" % (i+1))
 		except EnvironmentError, exc:
 			self.output_error(exc)
 		except UnicodeError, exc:
