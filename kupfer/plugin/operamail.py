@@ -97,12 +97,10 @@ class OperaContactsSource(ToplevelGroupingSource, FilesystemWatchMixin):
 							folderList.append(name)
 					elif line.startswith(u'MAIL=') and name and \
 							entryType == 'Contact' and not TRASH in folderList:
-						emails = line[5:].split('') # multiple addresses separated with two Ctrl-B characaters
-						if len(emails) == 1:
-							yield EmailContact(emails[0], name)
-						else:
-							for i,e in enumerate(emails):
-								yield EmailContact(e, name + " (email %d)" % (i+1))
+						emails = line[5:].split('') # multiple addresses separated with two Ctrl-B characters
+						print emails
+						for e in emails:
+							yield EmailContact(e, name)
 		except EnvironmentError, exc:
 			self.output_error(exc)
 		except UnicodeError, exc:
