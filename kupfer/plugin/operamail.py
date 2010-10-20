@@ -98,7 +98,6 @@ class OperaContactsSource(ToplevelGroupingSource, FilesystemWatchMixin):
 					elif line.startswith(u'MAIL=') and name and \
 							entryType == 'Contact' and not TRASH in folderList:
 						emails = line[5:].split('') # multiple addresses separated with two Ctrl-B characters
-						print emails
 						for e in emails:
 							yield EmailContact(e, name)
 		except EnvironmentError, exc:
